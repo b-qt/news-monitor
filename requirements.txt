@@ -1,0 +1,12 @@
+streamlit
+transformers
+torch
+pandas
+feedparser
+
+duckdb
+duckdb-engine
+
+plotly
+
+sqlalchemy

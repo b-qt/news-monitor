@@ -1,0 +1,46 @@
+# virtual environment
+venv/
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+# IDE files
+.vscode/
+.idea/
+# logs
+logs/*.log  
+# frontend
+frontend/.streamlit/
+frontend/.pytest_cache/
+
+# mage files
+mage_data/
+mage/__pycache__/
+mage/.mage/
+mage/.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+# Temporary files
+tmp/
+temp/
+*.tmp
+# Coverage reports
+.coverage
+htmlcov/
+.coverage.*
+# Test reports
+test_reports/
+reports/
+# Misc
+*.bak
+*.swp
+
+# data
+data/*.duckdb
+*.db
+*.png

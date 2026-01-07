@@ -1,0 +1,23 @@
+services:
+  mageai:
+    container_name: mageai_container
+    image: mageai/mageai:latest
+    ports:
+      - "6789:6789"
+    volumes:
+      - .:/home/src
+    environment:
+      - USER_CODE_PATH:/home/src/news_monitor
+
+  streamlit:
+    container_name: streamlit_app_container
+    build: .
+    image: samdobson/streamlit
+    ports:
+      - "8501:8501"
+    depends_on:
+      - mageai
+    volumes:
+      - .:/home/src
+    working_dir: /home/src
+    command: streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0
