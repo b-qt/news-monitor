@@ -6,38 +6,58 @@ import os
 import duckdb
 
 # 1. Pro-Tip: Cache the data so the app stays snappy
-@st.cache_data(show_spinner="Fetching news from the fridge...") 
+@st.cache_data(show_spinner="Cleaning the fridge and removing duplicates...") 
 def load_data():
-    """ Load and return data for the application."""
-    
-    # FIX: Ensure we use the absolute Docker path
+    """Load, merge, and deduplicate news data."""
     db_file_pattern = os.getenv("DB_FILE_PATH", '/home/src/data/*.duckdb')
     db_files = glob.glob(db_file_pattern)
     
     if not db_files:
-        # Don't use st.error here if you want a clean 'empty' state
         return pd.DataFrame()
     
-    resulting_df = pd.DataFrame()
+    # 1. Use a list to collect dataframes (Way faster than pd.concat in a loop)
+    df_list = []
     
     for file_path in db_files:
-        # Use status to show progress without cluttering the UI
-        with st.status(f"Reading {os.path.basename(file_path)}...", expanded=False) as status:
-            # FIX: Use 4 slashes for absolute path in duckdb-engine
-            engine = create_engine(f'duckdb:///{file_path}')
+        with st.status(f"Checking {os.path.basename(file_path)}...", expanded=False) as status:
             try:
-                with engine.connect() as connection:
-                    # Matches your Mage Exporter table name
-                    query = "SELECT * FROM spain_news_monitor"
-                    df = pd.read_sql(query, connection)
-                    
-                    resulting_df = pd.concat([resulting_df, df], ignore_index=True)
-                    status.update(label=f"✅ Loaded {len(df)} records", state="complete")
-                    
+                # 2. Optimization: Use DuckDB's native connection (No SQLAlchemy overhead)
+                # We use 'SELECT DISTINCT' right at the source to save memory
+                conn = duckdb.connect(file_path, read_only=True)
+                query = "SELECT DISTINCT * FROM spain_news_monitor"
+                df = conn.execute(query).df()
+                conn.close()
+                
+                if not df.empty:
+                    df_list.append(df)
+                    status.update(label=f"✅ Found {len(df)} unique records", state="complete")
             except Exception as e:
-                st.error(f"Error loading {file_path}: {e}")
+                st.error(f"Error reading {file_path}: {e}")
 
-    return resulting_df
+    if not df_list:
+        return pd.DataFrame()
+
+    # 3. Combine everything once
+    full_df = pd.concat(df_list, ignore_index=True)
+
+    # 4. Global Deduplication
+    # We use the 'link' column as the unique ID. If 'link' is missing, use 'title'.
+    # We keep the 'first' instance found.
+    dedup_column = 'link' if 'link' in full_df.columns else 'title'
+    
+    initial_count = len(full_df)
+    full_df = full_df.drop_duplicates(subset=[dedup_column], keep='first')
+    final_count = len(full_df)
+    
+    if initial_count > final_count:
+        st.toast(f"🗑️ Removed {initial_count - final_count} duplicate articles!")
+
+    # 5. Final Sort: Most recent news first
+    if 'published_date' in full_df.columns:
+        full_df['published_date'] = pd.to_datetime(full_df['published_date'])
+        full_df = full_df.sort_values(by='published_date', ascending=False)
+
+    return full_df
 
 def page_setup():
     # 2. FIX: This MUST be the first Streamlit command in the whole app
