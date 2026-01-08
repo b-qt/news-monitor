@@ -1,10 +1,9 @@
 ---
-title: Spain News Monitor 2026
-emoji: 🤖
-colorFrom: yellow
-colorTo: red
+title: Spain News Monitor
+emoji: 📊
+colorFrom: blue
+colorTo: green
 sdk: docker
-pinned: false
 app_port: 8501
 ---
 
