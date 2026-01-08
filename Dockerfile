@@ -29,8 +29,8 @@ nodaemon=true\n\
 user=root\n\
 \n\
 [program:mage_ui]\n\
-# This starts the Mage server and the scheduler for your 6-hour triggers
-command=python3 -m mage_ai start default_repo\n\
+# FIX: Use the absolute path to the mage binary
+command=/usr/local/bin/mage start default_repo\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
@@ -39,11 +39,10 @@ stderr_logfile_maxbytes=0\n\
 autorestart=true\n\
 \n\
 [program:mage_initial_run]\n\
-# This forces an immediate data pull on startup
-command=python3 -m mage_ai run default_repo spain_news_pipeline\n\
+# FIX: Use the absolute path here too
+command=/usr/local/bin/mage run default_repo spain_news_pipeline\n\
 directory=/home/src\n\
 startsecs=0\n\
-# We allow exit code 0 (success) or 1 (it might fail if DB is locked, but we want to know)\n\
 exitcodes=0,1\n\
 autorestart=false\n\
 stdout_logfile=/dev/stdout\n\
@@ -52,7 +51,8 @@ stderr_logfile=/dev/stderr\n\
 stderr_logfile_maxbytes=0\n\
 \n\
 [program:streamlit]\n\
-command=python3 -m streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0\n\
+# FIX: Use the absolute path for streamlit as well
+command=/usr/local/bin/streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
