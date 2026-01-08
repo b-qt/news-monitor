@@ -32,7 +32,7 @@ def load_data():
                 
                 if not df.empty:
                     df_list.append(df)
-                    status.update(label="File read successfully!", state=source"complete")
+                    status.update(label="File read successfully!", state="complete")
                     time.sleep(0.5)
                     status_placeholder.empty()
                     st.toast(f"✅ Loaded {len(df)} items from {os.path.basename(file_path)}", icon="📰")
