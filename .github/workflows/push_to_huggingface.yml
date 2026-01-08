@@ -14,4 +14,4 @@ jobs:
       - name: Push to Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://b-qt:$HF_TOKEN@huggingface.co/spaces/b-qt/news-monitor main
+        run: git push --force https://b-qt:$HF_TOKEN@huggingface.co/spaces/b-qt/spain_news main
