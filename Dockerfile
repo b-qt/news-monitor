@@ -28,12 +28,15 @@ RUN mkdir -p /home/src/data && chmod -R 777 /home/src/data
 # - mage_ui: Runs the background kitchen
 # - mage_initial_run: Forces the chef to cook one batch immediately on startup
 # - streamlit: The dashboard (Waiter)
+# ... inside your Dockerfile ...
+
 RUN printf "[supervisord]\n\
 nodaemon=true\n\
 user=root\n\
 \n\
 [program:mage_ui]\n\
-command=mage start default_repo\n\
+# USE THE MODULE PATH: python3 -m mage_ai
+command=python3 -m mage_ai start default_repo\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
@@ -42,7 +45,8 @@ stderr_logfile_maxbytes=0\n\
 autorestart=true\n\
 \n\
 [program:mage_initial_run]\n\
-command=mage run default_repo spain_news_pipeline\n\
+# USE THE MODULE PATH HERE TOO
+command=python3 -m mage_ai run default_repo spain_news_pipeline\n\
 directory=/home/src\n\
 startsecs=0\n\
 exitcodes=0,1\n\
@@ -53,7 +57,7 @@ stderr_logfile=/dev/stderr\n\
 stderr_logfile_maxbytes=0\n\
 \n\
 [program:streamlit]\n\
-command=streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0\n\
+command=python3 -m streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
