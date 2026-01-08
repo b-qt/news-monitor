@@ -30,7 +30,9 @@ def load_data():
                 
                 if not df.empty:
                     df_list.append(df)
-                    status.update(label=f"✅ Found {len(df)} unique records", state="complete")
+                    status.update(label=f"✅ Found {len(df)} unique records", 
+                                  state="complete", 
+                                  expanded=False)
             except Exception as e:
                 st.error(f"Error reading {file_path}: {e}")
 
