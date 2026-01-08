@@ -6,7 +6,7 @@ import time
 import duckdb
 from sqlalchemy import create_engine
 
-@st.cache_data(show_spinner=False) # Spinner is handled by our manual status
+#@st.cache_data(show_spinner=False) # Spinner is handled by our manual status
 def load_data():
     """Load, merge, and deduplicate news data."""
     # Ensure we look in the correct Docker folder
