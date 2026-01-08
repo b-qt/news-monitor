@@ -53,9 +53,9 @@ def load_data():
         st.toast(f"🗑️ Removed {initial_count - final_count} duplicate articles!")
 
     # 5. Final Sort: Most recent news first
-    if 'published_date' in full_df.columns:
-        full_df['published_date'] = pd.to_datetime(full_df['published_date'])
-        full_df = full_df.sort_values(by='published_date', ascending=False)
+    if 'published' in full_df.columns:
+        full_df['published'] = pd.to_datetime(full_df['published'])
+        full_df = full_df.sort_values(by='published', ascending=False)
 
     return full_df
 
