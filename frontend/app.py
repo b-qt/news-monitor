@@ -95,7 +95,7 @@ def page_setup():
     st.dataframe(data, use_container_width=True, hide_index=True)
     
     if 'sentiment_label' in data.columns:
-        st.write("### 📊 Market Sentiment")
+        st.write("### 📊 Public Sentiment")
         st.bar_chart(data['sentiment_label'].value_counts())
     
 if __name__ == '__main__':
