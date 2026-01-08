@@ -54,8 +54,12 @@ def page_setup():
     # Load data
     data = load_data()
     
+    
     if data.empty:
-        st.info("👋 Welcome! The database is currently empty. Please run the Mage pipeline to fetch the first batch of news.")
+        st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZ3bmZ3bmZ3/3o7TKMGpxx6B8N8W6/giphy.gif")
+        st.warning("👨‍🍳 The Chef (Mage AI) is currently fetching the first batch of news. This takes about 2-3 minutes...")
+        if st.button("Check if the Chef is finished"):
+            st.rerun()
         return
     
     # 3. FIX: Column Names (Matching your Transformer Block)
