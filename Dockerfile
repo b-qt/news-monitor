@@ -28,8 +28,10 @@ EXPOSE 8000
 # Command to run the application
 ##CMD ["python", "app.py"]
 # Use supervisor to run both Mage and Streamlit
-CMD ["/usr/bin/supervisord"] 
-#, "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+# Add this to your supervisord config section in the Dockerfile
+# This redirects the "internal" logs to the main Docker log so you can see them on HF
+RUN printf "[supervisord]\nnodaemon=true\nuser=root\n\n[program:mage]\ncommand=mage start mage_project\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0\n\n[program:streamlit]\ncommand=streamlit run app.py --server.port=8501 --server.address=0.0.0.0\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0" > /etc/supervisor/conf.d/apps.conf
 
 # End of Dockerfile
 
