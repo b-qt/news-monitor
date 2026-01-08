@@ -20,7 +20,7 @@ __Serverless__ ... Instead of running a dedicated database server, I'm using a s
 3. Run the application > `docker-compose up --build -d`
 4. Access the app in your browser at `http://localhost:8501`
 
-[![Preview of the app](preview.png)] <!---(http://localhost:8501)--->
+<!---[![Preview of the app](preview.png)] (http://localhost:8501)--->
 
 ## The Stack
 - Orchestration : Mage in Docker
