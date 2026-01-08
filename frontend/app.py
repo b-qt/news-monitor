@@ -3,6 +3,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import glob
 import os
+import time             
 import duckdb
 
 # 1. Pro-Tip: Cache the data so the app stays snappy
@@ -19,10 +20,11 @@ def load_data():
     df_list = []
     
     for file_path in db_files:
-        with st.status(f"Checking {os.path.basename(file_path)}...", expanded=False) as status:
+        status_placeholder = st.empty()
+
+        # 2. Run the status inside the placeholder
+        with status_placeholder.status(f"Reading {os.path.basename(file_path)}...", expanded=False) as status:
             try:
-                # 2. Optimization: Use DuckDB's native connection (No SQLAlchemy overhead)
-                # We use 'SELECT DISTINCT' right at the source to save memory
                 conn = duckdb.connect(file_path, read_only=True)
                 query = "SELECT DISTINCT * FROM spain_news_monitor"
                 df = conn.execute(query).df()
@@ -30,10 +32,21 @@ def load_data():
                 
                 if not df.empty:
                     df_list.append(df)
-                    status.update(label=f"✅ Found {len(df)} unique records", 
-                                  state="complete", 
-                                  expanded=False)
+                    # Update the status to 'complete' so the icon turns green
+                    status.update(label="Processing complete!", state="complete")
+                    
+                    # 3. THE MAGIC TRICK:
+                    # We wait a tiny fraction of a second so the user sees the green checkmark
+                    time.sleep(0.5) 
+                    
+                    # 4. Clear the status widget entirely from the screen
+                    status_placeholder.empty()
+                    
+                    # 5. Fire the Toast!
+                    st.toast(f"✅ Found {len(df)} news items in {os.path.basename(file_path)}", icon="📰")
+
             except Exception as e:
+                status_placeholder.empty() # Clear the status even on error
                 st.error(f"Error reading {file_path}: {e}")
 
     if not df_list:
