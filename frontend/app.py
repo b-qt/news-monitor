@@ -7,7 +7,7 @@ import time
 import duckdb
 
 # 1. Pro-Tip: Cache the data so the app stays snappy
-@st.cache_data(show_spinner="Cleaning the fridge and removing duplicates...") 
+#@st.cache_data(show_spinner="Cleaning the fridge and removing duplicates...") 
 def load_data():
     """Load, merge, and deduplicate news data."""
     db_file_pattern = os.getenv("DB_FILE_PATH", '/home/src/data/*.duckdb')
