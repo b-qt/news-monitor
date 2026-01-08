@@ -1,6 +1,6 @@
 ---
 title: Spain News Monitor 2026
-emoji: 🇪🇸
+emoji: 🤖
 colorFrom: yellow
 colorTo: red
 sdk: docker
