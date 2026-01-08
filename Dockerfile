@@ -29,7 +29,6 @@ nodaemon=true\n\
 user=root\n\
 \n\
 [program:mage_ui]\n\
-# FIX: Use the absolute path to the mage binary
 command=/usr/local/bin/mage start default_repo\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
@@ -40,7 +39,7 @@ autorestart=true\n\
 \n\
 [program:mage_initial_run]\n\
 # FIX: Use the absolute path here too
-command=/usr/local/bin/mage run default_repo spain_news_pipeline\n\
+command=/usr/local/bin/mage run default_repo news_monitor\n\
 directory=/home/src\n\
 startsecs=0\n\
 exitcodes=0,1\n\
