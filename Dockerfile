@@ -6,14 +6,12 @@ ENV MAGE_DATA_DIR=/home/src/mage_data
 WORKDIR /home/src
 
 # 2. Install system dependencies
-# We need supervisor for dual-run and build-essential for AI models
 RUN apt-get update && apt-get install -y \
     supervisor \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Install Python requirements
-# We do this before copying the whole project to utilize Docker cache
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -21,21 +19,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # 5. Fix Permissions
-# Creating the data folder if it doesn't exist and ensuring it's writable
-RUN mkdir -p /home/src/data && chmod -R 777 /home/src/data
+# We need 777 because Hugging Face runs with a specific user (UID 1000)
+RUN mkdir -p /home/src/data && chmod -R 777 /home/src/data && \
+    mkdir -p /home/src/mage_data && chmod -R 777 /home/src/mage_data
 
 # 6. Setup Supervisor Configuration
-# - mage_ui: Runs the background kitchen
-# - mage_initial_run: Forces the chef to cook one batch immediately on startup
-# - streamlit: The dashboard (Waiter)
-# ... inside your Dockerfile ...
-
 RUN printf "[supervisord]\n\
 nodaemon=true\n\
 user=root\n\
 \n\
 [program:mage_ui]\n\
-# USE THE MODULE PATH: python3 -m mage_ai
+# This starts the Mage server and the scheduler for your 6-hour triggers
 command=python3 -m mage_ai start default_repo\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
@@ -45,10 +39,11 @@ stderr_logfile_maxbytes=0\n\
 autorestart=true\n\
 \n\
 [program:mage_initial_run]\n\
-# USE THE MODULE PATH HERE TOO
+# This forces an immediate data pull on startup
 command=python3 -m mage_ai run default_repo spain_news_pipeline\n\
 directory=/home/src\n\
 startsecs=0\n\
+# We allow exit code 0 (success) or 1 (it might fail if DB is locked, but we want to know)\n\
 exitcodes=0,1\n\
 autorestart=false\n\
 stdout_logfile=/dev/stdout\n\
@@ -66,8 +61,20 @@ stderr_logfile_maxbytes=0\n\
 autorestart=true\n\
 " > /etc/supervisor/conf.d/apps.conf
 
-# 7. Expose Port for Hugging Face
+# 7. Expose Port for Hugging Face (Streamlit)
 EXPOSE 8501
 
-# 8. Start the Bouncer
+# 8. Start Supervisor
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/apps.conf"]
+
+# End of Dockerfile
+
+######################################################
+# 1. Determine the base image
+# 2. Set the working directory
+# 3. Install dependencies
+# 4. Copy application code to the container
+# 5. Create a non-root user and set ownership
+# 6. Expose the application port
+# 7. Define the command to run the application
+######################################################
