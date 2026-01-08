@@ -14,11 +14,14 @@ I'm building an automated pipeline that scrapes Spanish-language news headlines 
 __Serverless__ ... Instead of running a dedicated database server, I'm using a serverless data warehouse -_DuckDB_ for storage and _HuggingFace Inference API_ for the heavylifting. This is going to be orchestrated by _Mage_ running in _Docker_.  
 
 ### The "how" to reproduce this project
+#### Steps to clone and run locally ... _Option 1_
 1. Clone the repo > `git clone https://github.com/b-qt/news-monitor.git`
 2. Install dependencies > `pip install -r requirements.txt`
 3. Run the application > `docker-compose up --build -d`
 4. Access the app in your browser at `http://localhost:8501`
-
+#### Steps to clone and run locally ... _Option 2_
+1. > `docker run -it -p 7860:7860 --platform=linux/amd64 \
+	registry.hf.space/b-qt-spain-news:latest` 
 <!---[![Preview of the app](preview.png)] (http://localhost:8501)--->
 
 ## The Stack
