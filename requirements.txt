@@ -10,3 +10,5 @@ duckdb-engine
 plotly
 
 sqlalchemy
+
+mage-ai
