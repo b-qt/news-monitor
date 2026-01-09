@@ -1,14 +1,21 @@
 streamlit
-transformers
-torch
+
 pandas
+plotly
+
 feedparser
 
 duckdb
 duckdb-engine
 
-plotly
-
 sqlalchemy
 
 mage-ai
+
+supervisor
+
+huggingface-hub
+transformers
+torch
+
+dbt-core

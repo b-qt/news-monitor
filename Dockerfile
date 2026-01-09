@@ -38,7 +38,7 @@ stderr_logfile_maxbytes=0\n\
 autorestart=true\n\
 \n\
 [program:mage_initial_run]\n\
-command=bash -c "sleep 10 && /usr/local/bin/mage run default_repo news_monitor"\n\
+command=bash -c \"sleep 10 && /usr/local/bin/mage run default_repo news_monitor\"\n\
 directory=/home/src\n\
 user=root\n\
 startsecs=0\n\
