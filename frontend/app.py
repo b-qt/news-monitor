@@ -92,7 +92,9 @@ def page_setup():
     st.divider()
     
     # Display Results
-    st.dataframe(data.sample(25), use_container_width=True, hide_index=True)
+    st.dataframe(data.sample(25), 
+                 width='content',
+                 hide_index=True)
     
     if 'sentiment_label' in data.columns:
         st.write("### 📊 Public Sentiment")
