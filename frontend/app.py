@@ -99,4 +99,9 @@ def page_setup():
         st.bar_chart(data['sentiment_label'].value_counts())
     
 if __name__ == '__main__':
+    try:
+        pipelines = os.listdir('/home/src/.mage/pipelines/')
+        print(f"\t\t\t\tDEBUG: Found pipelines: {pipelines}")
+    except Exception as e:
+        print(f"\t\t\t\tDEBUG Error accessing pipelines: {e}")
     page_setup()

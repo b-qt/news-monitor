@@ -38,9 +38,9 @@ stderr_logfile_maxbytes=0\n\
 autorestart=true\n\
 \n\
 [program:mage_initial_run]\n\
-# FIX: Use the absolute path here too
-command=/usr/local/bin/mage run default_repo news_monitor\n\
+command=bash -c "sleep 10 && /usr/local/bin/mage run default_repo news_monitor"\n\
 directory=/home/src\n\
+user=root\n\
 startsecs=0\n\
 exitcodes=0,1\n\
 autorestart=false\n\
@@ -62,6 +62,8 @@ autorestart=true\n\
 
 # 7. Expose Port for Hugging Face (Streamlit)
 EXPOSE 8501
+
+RUN mkdir -p /home/src/data && chmod -R 777 /home/src/data
 
 # 8. Start Supervisor
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/apps.conf"]
