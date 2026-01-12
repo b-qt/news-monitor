@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: spain_news_source
+    #database: news_db_2026-01-08_
+    schema: main
+    tables:
+      - name: spain_news_raw
+        identifier: spain_news_monitor
+        description: "Raw news data collected from google rss."
+        columns:
+          - name: title
+            description: "The title of the news article."
+          - name: link
+            description: "The URL of the news article."
+          - name: published
+            description: "The publication date and time of the news article."
+          - name: source
+            description: "The source from which the news article was collected."
+          - name: entry_date
+            description: "The date the news article was entered into the database."
+          - name: sentiment_label
+            description: "The sentiment label assigned to the news article."
+          - name: sentiment_score
+            description: "The sentiment score assigned to the news article."

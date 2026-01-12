@@ -30,6 +30,24 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   news_report:
-    # Config indicated by + and applies to all files under models/example/
-    example:
+    # Config indicated by + and applies to all files under models/staging/
+    staging:
+      +materialized: table 
+    marts:
+      +materialized: incremental  
+      +incremental_strategy: update
+      +unique_key: link
+      +partition_by: 
+        field: published_at
+        data_type: date
+      +cluster_by: [source]
+    intermediate:
+      +materialized: table
+    analytics:
       +materialized: view
+    reporting:
+      +materialized: table
+    external:
+      +materialized: external
+    src_news:
+      +materialized: table
