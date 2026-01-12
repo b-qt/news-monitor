@@ -20,16 +20,16 @@ COPY . .
 
 # 5. Fix Permissions
 # We need 777 because Hugging Face runs with a specific user (UID 1000)
-RUN mkdir -p /home/src/data && chmod -R 777 /home/src/data && \
-    mkdir -p /home/src/mage_data && chmod -R 777 /home/src/mage_data
-
+RUN mkdir -p /home/src/data /home/src/mage_data && \
+    chmod -R 777 /home/src/data /home/src/mage_data
+    
 # 6. Setup Supervisor Configuration
 RUN printf "[supervisord]\n\
 nodaemon=true\n\
 user=root\n\
 \n\
 [program:mage_ui]\n\
-command=/usr/local/bin/mage start default_repo\n\
+command=/usr/local/bin/mage start default_repo --host 0.0.0.0 --port 6789\n\
 directory=/home/src\n\
 stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
@@ -62,6 +62,8 @@ autorestart=true\n\
 
 # 7. Expose Port for Hugging Face (Streamlit)
 EXPOSE 8501
+# 7.i Expose Port for Mage UI
+EXPOSE 6789
 
 RUN mkdir -p /home/src/data && chmod -R 777 /home/src/data
 

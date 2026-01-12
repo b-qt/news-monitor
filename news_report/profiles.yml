@@ -4,6 +4,7 @@ news_report:
     dev_news_report:
       type: duckdb
       path: "/home/b_qt/Documents/Python/news monitor/data/news_db_2026-01-06_.duckdb" #../data/news_report.duckdb
+      database: main
       extensions: []
       threads: 6
       cache_size: 2048

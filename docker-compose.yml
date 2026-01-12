@@ -8,6 +8,7 @@ services:
       - .:/home/src
     environment:
       - USER_CODE_PATH:/home/src/news_monitor
+  #  command: mage start default_repo
 
   streamlit:
     container_name: streamlit_app_container
@@ -20,4 +21,4 @@ services:
     volumes:
       - .:/home/src
     working_dir: /home/src
-    command: streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0
+    command: python3 -m streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0
