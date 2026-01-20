@@ -8,12 +8,13 @@
   a staging table and can be easily recomputed as needed.  
   
   If performance becomes an issue, consider changing to 'table'
+  because tables are faster to query than views.
 */
 
 with raw_data as (
 
     select *
-    from {{ source('spain_news_source', 'spain_news_raw') }}
+    from {{ ref('stg_news_incremental') }} -- source(table_name, source_name)
 
 )
 select
@@ -29,3 +30,5 @@ select
 from raw_data
 -- 2. FIX: Change 'id' to 'link' or 'title'
 where link is not null
+
+/* Use source() in the model definition (staging phase) */

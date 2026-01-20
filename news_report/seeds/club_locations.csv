@@ -1,0 +1,11 @@
+club_id,name,neighborhood,vibe_category,has_dress_code,latitude,longitude
+1,Razzmatazz,Poblenou,Alternative/Multi-room,false,41.3977,2.1911
+2,Sala Apolo,Poble Sec,Indie/Rock/Pop,false,41.3750,2.1691
+3,Moog,Gothic Quarter,Techno/Underground,false,41.3784,2.1741
+4,Macarena,Gothic Quarter,House/Intimate,false,41.3804,2.1764
+5,INPUT,Poble Espanyol,High-Fidelity Techno,false,41.3686,2.1481
+6,La Terrrazza,Poble Espanyol,Open Air/House,false,41.3698,2.1492
+7,Opium,Barceloneta,Commercial/Touristy,true,41.3855,2.1969
+8,Pacha,Barceloneta,Commercial/House,true,41.3858,2.1972
+9,Sidecar,Gothic Quarter,Indie/Dive Bar,false,41.3805,2.1753
+10,Jamboree,Gothic Quarter,Jazz/Hip-Hop,false,41.3799,2.1755

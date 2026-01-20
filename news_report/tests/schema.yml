@@ -1,0 +1,23 @@
+# schema.yml holds tests for stg_news_incremental model
+models:
+  - name: stg_news_incremental
+    description: "Staging table for incremental news data"
+    
+    # 1: Table level tests ... Singular/Generic Tests
+    
+
+    # 2: Column level tests ... Specific to Columns
+    columns:
+      - name: published
+        description: "The published timestamp of the news article"
+        data_tests:
+          - not_null
+          - assert_column_not_null
+        severity: error
+      - name: sentiment_score
+        description: "Sentiment score ranging from 0 to 1"
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+        severity: error

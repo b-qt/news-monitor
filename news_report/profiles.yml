@@ -3,8 +3,7 @@ news_report:
   outputs:
     dev_news_report:
       type: duckdb
-      path: "/home/b_qt/Documents/Python/news monitor/data/news_db_2026-01-06_.duckdb" #../data/news_report.duckdb
-      database: main
+      path: "/home/b_qt/Documents/Python/news monitor/data/news_report.duckdb" #news_db_2026-01-06_.duckdb" #../data/news_report.duckdb
       extensions: []
       threads: 6
       cache_size: 2048
@@ -17,3 +16,4 @@ news_report:
 # 'use_numpy' enables optimized support for numpy data types.
 # 'quote_identifiers' determines whether to quote identifiers in SQL queries.
 # 'settings' allows you to specify additional DuckDB settings as key-value pairs.
+# ´database´ is optional and can be used to specify a particular database within DuckDB.

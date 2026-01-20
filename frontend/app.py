@@ -7,66 +7,32 @@ import duckdb
 from sqlalchemy import create_engine
 
 #@st.cache_data(show_spinner=False) # Spinner is handled by our manual status
-def load_data():
-    """Load, merge, and deduplicate news data."""
-    # Ensure we look in the correct Docker folder
-    db_file_pattern = '/home/src/data/*.duckdb'
-    db_files = glob.glob(db_file_pattern)
-    
-    if not db_files:
-        print("DEBUG: No .duckdb files found in /home/src/data/")
+def load_data(db_path: str) -> pd.DataFrame:
+    """Read data after it has been processed in dbt"""
+    if not os.path.exists(db_path):
+        st.error(f"🚫 File not found in: {db_path}")
         return pd.DataFrame()
     
-    df_list = []
+    #2 . Create connection engine in read-only mode
+    conn = duckdb.connect(database=db_path, 
+                          read_only=True)
+    #3. Read data into pandas dataframe from mart or incremental table
+    query = """
+    SELECT * FROM main.stg_news_incremental
+    ORDER BY published DESC
+    """
     
-    for file_path in db_files:
-        status_placeholder = st.empty()
-        with status_placeholder.status(f"Reading {os.path.basename(file_path)}...", expanded=False) as status:
-            try:
-                # Use native DuckDB for speed on Hugging Face
-                conn = duckdb.connect(file_path, read_only=True)
-                # Matches the table name from your Mage Exporter
-                query = "SELECT * FROM spain_news_monitor"
-                df = conn.execute(query).df()
-                conn.close()
-                
-                if not df.empty:
-                    df_list.append(df)
-                    status.update(label="File read successfully!", state="complete")
-                    time.sleep(0.5)
-                    status_placeholder.empty()
-                    st.toast(f"✅ Loaded {len(df)} items from {os.path.basename(file_path)}", icon="📰")
+    df = conn.execute(query).df()
+    #4. Close connection
+    conn.close()
+    return df
+    
 
-            except Exception as e:
-                status_placeholder.empty()
-                print(f"DEBUG Error: {e}")
-                st.error(f"Error reading {file_path}")
-
-    if not df_list:
-        return pd.DataFrame()
-
-    full_df = pd.concat(df_list, ignore_index=True)
-
-    # 1. FIX: Use 'link' or 'title' for deduplication
-    id_col = 'link' if 'link' in full_df.columns else 'title'
-    full_df = full_df.drop_duplicates(subset=[id_col], keep='first')
-
-    # 2. FIX: Unified Column Mapping
-    # Ensure column names match what Mage produces
-    rename_map = {'source': 'source', 'published': 'published'}
-    full_df = full_df.rename(columns={k: v for k, v in rename_map.items() if k in full_df.columns})
-
-    if 'published' in full_df.columns:
-        full_df['published'] = pd.to_datetime(full_df['published'])
-        full_df = full_df.sort_values(by='published', ascending=False)
-
-    return full_df
-
-def page_setup():
+def page_setup(db_path: str):
     st.set_page_config(page_title="Spain News Monitor 2026", page_icon="🇪🇸", layout="wide")    
     st.write("# 🇪🇸 Spain News Monitor Application")
     
-    data = load_data()
+    data = load_data(db_path=DB_PATH)
     
     if data.empty:
         st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZ3bmZ3bmZ3/3o7TKMGpxx6B8N8W6/giphy.gif")
@@ -85,8 +51,9 @@ def page_setup():
     u_sources = data['source'].nunique() if 'source' in data.columns else 0
     col2.metric("Unique Sources", u_sources)
     
-    if 'published' in data.columns:
-        date_range = f"{data['published'].min().strftime('%d %b')} to {data['published'].max().strftime('%d %b')}"
+    # Date Range
+    if 'entry_date' in data.columns:
+        date_range = f"{data['entry_date'].min().strftime('%d %b')} to {data['entry_date'].max().strftime('%d %b')}"
         col3.metric("Date Range", date_range)
     
     st.divider()
@@ -98,12 +65,32 @@ def page_setup():
     
     if 'sentiment_label' in data.columns:
         st.write("### 📊 Public Sentiment")
-        st.bar_chart(data['sentiment_label'].value_counts())
+        st.bar_chart(data['sentiment_label'].value_counts(),
+                     use_container_width=True)
+        
+    # Sidebar
+    with st.sidebar:
+        st.divider()
+        st.subheader(" Warehouse health")
+        
+        db_size = os.path.getsize(db_path) / (1024 * 1024)
+        st.metric("DuckDB Size (MB)", f"{db_size:.2f} MB")
+        
+        if st.button("Refresh Data"):
+           # st.experimental_rerun()
+           conn = duckdb.connect(database=db_path, 
+                                 read_only=True)
+           count = conn.execute("SELECT COUNT(*) FROM main.stg_news_incremental").fetchone()[0]
+           conn.close()
+           st.write(f"Total records in the database: {count}")
     
 if __name__ == '__main__':
+    #1. Point to DuckDB database
+    DB_PATH = "data/news_report.duckdb"
+
     try:
         pipelines = os.listdir('/home/src/.mage/pipelines/')
         print(f"\t\t\t\tDEBUG: Found pipelines: {pipelines}")
     except Exception as e:
         print(f"\t\t\t\tDEBUG Error accessing pipelines: {e}")
-    page_setup()
+    page_setup(db_path=DB_PATH)

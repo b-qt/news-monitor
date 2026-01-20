@@ -11,8 +11,8 @@ if 'test' not in globals():
     from mage_ai.data_preparation.decorators import test
 
 URLS = [
-    'https://news.google.com/rss/search?q=Espa%C3%B1a&hl=es&gl=ES&ceid=ES%3Aes',
-    'https://news.google.com/rss/search?q=Spain&hl=en-US&gl=US&ceid=US%3Aen'
+    'https://news.google.com/rss/search?q=Espa%C3%B1a&hl=es&gl=ES&ceid=ES%3Aes%3after:2025-10-01',
+    'https://news.google.com/rss/search?q=Spain&hl=en-US&gl=US&ceid=US%3Aen%3after:2025-10-01'
 ]
 @data_loader
 def load_data_from_api(*args, **kwargs):

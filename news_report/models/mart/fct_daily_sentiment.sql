@@ -12,7 +12,8 @@
 with news as (
 
     select *
-    from {{ ref('stg_spain_news') }}
+    from {{ ref('ephemeral_spain_news') }}
+    
 
 )
 select 
@@ -24,3 +25,5 @@ select
 from news
 group by 1,2 -- group by news_date, sentiment_label
 order by 1 desc
+
+/* Use ref() in the model definition (mart phase) */

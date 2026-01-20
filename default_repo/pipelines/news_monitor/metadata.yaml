@@ -47,7 +47,7 @@ blocks:
   type: scratchpad
   upstream_blocks: []
   uuid: scratchpad_01
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration: {}
   downstream_blocks: []

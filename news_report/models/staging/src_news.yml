@@ -1,5 +1,6 @@
 version: 2
 
+# Sources are defined and nested under the "sources" key
 sources:
   - name: spain_news_source
     #database: news_db_2026-01-08_
@@ -11,15 +12,36 @@ sources:
         columns:
           - name: title
             description: "The title of the news article."
+            data_test:
+              - not_null
           - name: link
             description: "The URL of the news article."
+            data_test:
+              - not_null
+              - unique
           - name: published
             description: "The publication date and time of the news article."
+            data_test:
+              - not_null
           - name: source
             description: "The source from which the news article was collected."
+            data_test:
+              - not_null
           - name: entry_date
             description: "The date the news article was entered into the database."
+            data_test:
+              - not_null
           - name: sentiment_label
             description: "The sentiment label assigned to the news article."
+            data_test:
+              - not_null
+            accepts:
+              - 'positive'
+              - 'negative'
+              - 'neutral'
           - name: sentiment_score
-            description: "The sentiment score assigned to the news article."
+            description: "The sentiment score assigned to the news article (ranging from -1 to 1)."
+            data_test:
+              - not_null
+              - accepted_values:
+                  values: [-1, 1]

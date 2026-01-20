@@ -1,0 +1,42 @@
+snapshots:
+  - name: spain_news_snapshot
+    target_schema: news_report
+    tags:
+      - spain_news
+    relations: source('spain_news_source', 'spain_news_raw')
+    config:
+      schema: news_report
+      database: dev_news_report
+      unique_key: link
+      strategy: timestamp
+      updated_at: published_at
+      check_cols: all
+      dbt_valid_to_current: "to_date('9999-12-31 23:59:59')"
+    snapshot_meta_column_names:
+      dbt_valid_from: valid_from
+      dbt_valid_to: valid_to
+      dbt_scd_id: scd_id
+      dbt_updated_at: updated_at
+      dbt_is_deleted: is_deleted
+
+# This snapshot configuration captures changes in the 'spain_news_raw' table from the 'spain_news_source' source.
+# Configurations:
+# - 'name': The name of the snapshot.
+# - 'target_schema': The schema where the snapshot will be stored.
+# - 'target_database': The database where the snapshot will be stored. Matches the profile target.
+# - 'tags': Tags for categorizing the snapshot.
+# - 'relations': Specifies the source table to snapshot and its source definition; in the format source('source_name', 'table_name').
+# - 'config': Additional configurations for the snapshot:
+#   - 'schema': The schema for the snapshot table.
+#   - 'database': The database for the snapshot table.
+#   - 'unique_key': The column used to uniquely identify records.
+#   - 'strategy': The snapshot strategy, here set to 'timestamp' to track changes based on a timestamp column.
+#   - 'updated_at': The column that indicates when a record was last updated.
+#   - 'check_cols': Specifies which columns to check for changes; 'all' means all columns are checked.
+#   - 'dbt_valid_to_current': A SQL expression defining the 'valid_to' date for current records in the snapshot.
+# - 'snapshot_meta_column_names': Custom names for the metadata columns added by dbt snapshots:
+#   - 'dbt_valid_from': Renamed to 'valid_from'.
+#   - 'dbt_valid_to': Renamed to 'valid_to'.
+#   - 'dbt_scd_id': Renamed to 'scd_id'.
+#   - 'dbt_updated_at': Renamed to 'updated_at'.
+#   - 'dbt_is_deleted': Renamed to 'is_deleted'.
