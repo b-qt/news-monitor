@@ -1,4 +1,5 @@
 -- This test asserts that the specified column in the given table does not contain any NULL values.
+-- Put it in the macro directory because its a generic test as its a macro with a test tag
 {% test assert_column_not_null(model, column_name) %}
   
   select *

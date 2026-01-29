@@ -3,29 +3,21 @@
 with news as (
 
     select *
-    from {{ ref('ephemeral_spain_news') }}
+    from {{ ref('sagrada_sentiment_snapshot') }}
 
 )
-/* select distinct(*) from news
-where title ilike '%sagrada%'
-order by published desc */
-
 select 
-    -- 1. These are your "Buckets" (Dimensions)
+    -- 1. These are "Buckets" (Dimensions)
     cast(published as date) as news_date,
     sentiment_label,
     source,
     title,
 
-    -- 2. These are your "Metrics" (Aggregates)
+    -- 2. These are "Metrics" (Aggregates)
     count(*) as article_count,
-    --round(avg(sentiment_score), 4) as avg_sentiment_confidence
+    round(avg(sentiment_score), 4) as avg_sentiment_confidence
 
 from news
-where title ilike '%sagrada%'
-
--- 3. FIX: You must list columns 1, 2, and 3 here
-group by 1, 2, 3, 4
--- (Or group by news_date, sentiment_label, source)
-
+group by 1, 2, 3,4
+-- (Or group by news_date, sentiment_label, source, title)
 order by news_date desc

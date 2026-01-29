@@ -3,13 +3,17 @@ news_report:
   outputs:
     dev_news_report:
       type: duckdb
-      path: "/home/b_qt/Documents/Python/news monitor/data/news_report.duckdb" #news_db_2026-01-06_.duckdb" #../data/news_report.duckdb
+      path: "{{ env_var('DB_PATH', '../data/news_report.duckdb' ) }}" #"/home/src/data/news_report.duckdb" 
       extensions: []
       threads: 6
       cache_size: 2048
       use_numpy: true
       quote_identifiers: true # Default is true; set to false to disable quoting of identifiers.
-# The path to the DuckDB database file. Use ':memory:' for an in-memory database.
+
+# 'path' is the path to the DuckDB database file. Use ':memory:' for an in-memory database.
+# use an env variable to pick either the path in the docker container or the local path; depending on where we
+# run the command from.
+
 # Use 'extensions' to load any DuckDB extensions you might need.
 # Use 'threads' to set the number of threads DuckDB should use; where threads are the number of CPU processor cores to utilize.
 # 'cache_size' sets the maximum size of the on-disk cache in MB.

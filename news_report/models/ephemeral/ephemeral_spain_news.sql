@@ -8,7 +8,7 @@
 
 
 /* --select * from {{ ref('stg_spain_news') }} */
-select * from {{ ref('int_news_cleaned') }}
+select * from {{ ref('int_news_cleaned') }} as source
 
 
 /*

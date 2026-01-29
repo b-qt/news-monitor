@@ -12,18 +12,20 @@
 with news as (
 
     select *
-    from {{ ref('ephemeral_spain_news') }}
-    
-
+    from {{ ref('spain_news_snapshot') }}
 )
-select 
-    cast(published as date) as news_date,
-    sentiment_label,
-    count(*) as article_count,
+select
+    --- format date to human-readable version
+    {{ format_date('published') }} as date_display, -- cast(published as date) as news_date,
+    sentiment_label as sentiment,
+    count(*) as number_of_articles,
     round(avg(sentiment_score), 4) as avg_sentiment_confidence,
+    -- most frequent source for this group
     mode(source) as top_source
 from news
-group by 1,2 -- group by news_date, sentiment_label
-order by 1 desc
+-- filter for the last 1 day and today
+where cast(published as date) >= current_timestamp - interval '7 days'
+group by 1, 2-- group by news_date, sentiment_label
+order by 1 desc, 3 desc
 
 /* Use ref() in the model definition (mart phase) */

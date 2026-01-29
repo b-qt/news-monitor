@@ -16,6 +16,7 @@ select
     md5(link) as news_id,
     trim(title) as title,
     lower(source) as source,
+    link,
     sentiment_label,
     sentiment_score,
     published,
@@ -27,3 +28,5 @@ select
     end as is_recent
 from incremental_data
 where link is not null
+and trim(link) != ''
+and link != 'None'

@@ -17,13 +17,17 @@ def transform(data, *args, **kwargs):
     """
     This code creates columns for sentiment_labels and sentiment_scores
     """
+    print(f"\t\tDEBUGGING: Data type is {type(data)}")
+    if isinstance(data, pd.DataFrame):
+        print(f"\t\t\tDEBUGGING: Available columns are {data.columns.tolist()}")
+
     pipeline_sentiment_es = pipeline("sentiment-analysis", 
                                      model="pysentimiento/robertuito-sentiment-analysis",
                                      framework="pt")
     
     # SENTIMENT ANALYSIS
     print("Analyzing sentiment (English and Spanish)...")
-    print(f"Columns ... {data.columns}")
+    print(f"Columns ... {data.columns.tolist()}")
     
     # Run Spanish sentiment on original (cleaned) titles
     sent_es_results = pipeline_sentiment_es(data["title"].tolist(), truncation=True)

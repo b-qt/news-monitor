@@ -7,7 +7,7 @@
 
 {# 1. Find the files #}
 {% set find_files_query %}
-    SELECT file FROM glob('/home/b_qt/Documents/Python/news monitor/data/*.duckdb')
+    SELECT file FROM glob('/home/src/data/*.duckdb')
     WHERE file NOT LIKE '%news_report.duckdb'
 {% endset %}
 
@@ -53,6 +53,10 @@ with all_unioned_data as (
                 cast(published as timestamp) as published,
                 cast(entry_date as timestamp) as entry_date
             from "{{ alias }}".main.spain_news_monitor
+            where link is not null
+            and trim(link) != ''
+            and lower(link) != 'none'
+            and lower(link) != 'nan'
             {% if not loop.last %} union all {% endif %}
         {% endfor %}
     {% else %}
@@ -71,13 +75,18 @@ with all_unioned_data as (
 )
 
 select * from all_unioned_data
-
-{% if is_incremental() %}
-    -- Filter to only include rows newer than the latest date in the existing table
-    --#where published > (select coalesce(max(published), '1900-01-01'::timestamp) from {{ this }})
-{% endif %}
+    where link is not null
+    and trim(link) != ''
+    and lower(link) != 'none' 
 
 -- Remove duplicates based on link, keeping the most recent published date
 {% set partition_cols = "link" %}
 {% set order_by_col = "published desc" %}
 {{ remove_duplicates(partition_cols, order_by_col) }}
+
+{% if is_incremental() %}
+    -- Filter to only include rows newer than the latest date in the existing table
+    and published > (select coalesce(max(published), '1900-01-01'::timestamp) from {{ this }})
+{% endif %}
+
+--- To run this in dbt, use : dbt run --select stg_news_incremental
