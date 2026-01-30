@@ -28,7 +28,18 @@ select
     published,
     entry_date
 from raw_data
--- 2. FIX: Change 'id' to 'link' or 'title'
 where link is not null
 
 /* Use source() in the model definition (staging phase) */
+/* 
+  ----- Sampling ------
+  select * from {{ source(#source_name(db), #table_name)}}
+
+  {% if target.name == "dev" %} -- go to the dev target and get 10 items
+   limit 10
+  {% endif %}
+  
+  ---------------------
+  run in dev with dbt build
+  run in prod with dbt build --target prod
+ */

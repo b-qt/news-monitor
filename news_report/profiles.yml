@@ -3,12 +3,16 @@ news_report:
   outputs:
     dev_news_report:
       type: duckdb
-      path: "{{ env_var('DB_PATH', '../data/news_report.duckdb' ) }}" #"/home/src/data/news_report.duckdb" 
+      path: "{{ env_var('DB_PATH', '../data/news_report.duckdb' ) }}" # local db :: could be a sample from the data lake
       extensions: []
       threads: 6
       cache_size: 2048
       use_numpy: true
       quote_identifiers: true # Default is true; set to false to disable quoting of identifiers.
+    prod_news_report:
+      type: duckdb
+      path: "{{ env_var('DB_PATH', '../data/news_report.duckdb' ) }}" # Probably the warehouse final schema(s)
+      threads: 12
 
 # 'path' is the path to the DuckDB database file. Use ':memory:' for an in-memory database.
 # use an env variable to pick either the path in the docker container or the local path; depending on where we

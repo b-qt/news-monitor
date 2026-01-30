@@ -79,7 +79,7 @@ select * from all_unioned_data
     and trim(link) != ''
     and lower(link) != 'none' 
 
--- Remove duplicates based on link, keeping the most recent published date
+-- Remove duplicates based on link, keeping the most recent published date as single copy
 {% set partition_cols = "link" %}
 {% set order_by_col = "published desc" %}
 {{ remove_duplicates(partition_cols, order_by_col) }}
