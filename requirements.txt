@@ -1,0 +1,17 @@
+streamlit
+
+pandas
+plotly
+
+
+duckdb
+duckdb-engine
+
+sqlalchemy
+
+mage-ai
+
+supervisor
+
+dbt-duckdb>=1.10.0
+
