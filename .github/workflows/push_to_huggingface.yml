@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Push to Hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://b-qt:$HF_TOKEN@huggingface.co/spaces/b-qt/spain_news main
+      #- name: Push to Hub
+      #  env:
+      #    HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      #  run: git push --force https://b-qt:$HF_TOKEN@huggingface.co/spaces/b-qt/spain_news main
