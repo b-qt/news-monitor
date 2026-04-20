@@ -1,16 +1,7 @@
----
-title: Spain News Monitor
-emoji: 📊
-colorFrom: blue
-colorTo: green
-sdk: docker
-app_port: 8501
----
-
 # 🏗️ The Spanish Market Intelligence Refinery 2026
 
 ![Status](https://img.shields.io/badge/Status-In%20Production-success?style=for-the-badge&logo=statuspage)
-![Market](https://img.shields.io/badge/Market%20Spain-blue?style=for-the-badge&logo=googlemaps)
+![Market](https://img.shields.io/badge/Market-Spain-blue?style=for-the-badge&logo=googlemaps)
 ![Stack](https://img.shields.io/badge/Stack-Modern%20Data%20Refinery-orange?style=for-the-badge&logo=databricks)
 
 > **"Turning the digital sludge of the Spanish job market into high-purity strategic gold."**
@@ -65,7 +56,7 @@ docker-compose up -d
 ## 🏛️ Architect's Note
 This project was built during the spring of 2026 as a strategic bridge to the industrial powerhouses of **Northern Spain**. It represents a commitment to **Infrastructure Sovereignty** and **Sustainable Data Engineering**—minimizing compute waste while maximizing insight purity.
 
-**Built with :coffee: in Barcelona | April 2026.**
+**Built with :tea: in Barcelona | April 2026.**
 
 ---
 
