@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # 1. Environment setup
 ENV PYTHONUNBUFFERED=1
