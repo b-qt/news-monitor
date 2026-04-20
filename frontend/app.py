@@ -8,7 +8,7 @@ import traceback # For debugging purposes, can be removed in production
 
 # --- CONFIGURATION & PATHS ---
 # We use absolute paths to ensure the Docker bouncer never gets lost
-DB_PATH = "/home/src/data/news_report.duckdb"
+DB_PATH = "/home/src/data/news_db.duckdb" #"/home/src/data/news_report.duckdb"
 DBT_DIR = "/home/src/news_report"
 
 # --- ENGINE FUNCTIONS (The Logic) ---
@@ -31,7 +31,7 @@ def get_warehouse_data():
             
             #st.write(f"📦 Available tables in the warehouse: {' ; '.join(item[0] for item in tables)}")
             
-            cmd_duckdb = "SELECT * FROM main.stg_news_postings ORDER BY published DESC"
+            cmd_duckdb = "SELECT * FROM main.spain_news_feed  where published >= current_date - interval '2 months' ORDER BY published DESC" # We only want recent news for the dashboard, but this can be adjusted as needed
             #st.code(f"SQL Query: {cmd_duckdb}", language="sql")
 
             df = conn.execute(cmd_duckdb).df()
@@ -101,27 +101,42 @@ def render_analytics_dashboard(df):
     # Data Table
     st.subheader(":newspaper: Refined News Feed")
     st.dataframe(
-        df[["title", "link", "source", "sentiment_label"]].sample(n=5),
+        df[["title", "link", "source", "sentiment_label", "category"]].sample(n=5),
         use_container_width=True, 
         hide_index=True,
         column_config={
         "link": st.column_config.LinkColumn("Read Article"),
         "source": "📰 Source",
         "sentiment_label": "📊 Sentiment",
-        "title": "🗞️ Title"
+        "title": "🗞️ Title",
+        "category": "Category"
     })
     
-    # Daily sentiment trend (Comparison of the number of positive to negative to neutral sentiments) usint the sentiment_label column
-    st.subheader(":bar_chart: Daily Sentiment Trends")
-    # 1. Prepare the Pivot Table (Rows = Dates, Columns = Sentiments)
-    # This reshapes the data so Streamlit knows how to stack it
-    pivot_df = df.groupby([df['published'].dt.date, 'sentiment_label']).size().unstack(fill_value=0)
+    sentiment_order = ['NEG', 'NEU', 'POS']
+    colors = ['#E74C3C', '#3498DB', '#2ECC71'] # Red (Neg), Blue (Neu), Green (Pos)
 
-    # 2. Display
-    st.bar_chart(pivot_df, horizontal=True)
-    
-    
-    
+    st.header("📊 Daily Sentiment Trends")
+    cols = st.columns(3)
+
+    for i, cat in enumerate(['economy', 'tech', 'real_estate']):
+        with cols[i]:
+            st.subheader(cat.title())
+            
+            cat_df = df[df['category'] == cat]
+            if not cat_df.empty:
+                chart_data = (
+                    cat_df.groupby([df['published'].dt.date, 'sentiment_label'])
+                    .size()
+                    .unstack(fill_value=0)
+                    )
+                for label in sentiment_order:
+                    if label not in chart_data.columns:
+                        chart_data[label] = 0
+                chart_data = chart_data[sentiment_order].sort_index()
+                st.bar_chart(chart_data, color=colors, horizontal=True)
+            else:
+                st.info("📭 No data.")
+            
     # Sidebar for Warehouse Management
     with st.sidebar:
         st.subheader("🛠️ Maintenance")

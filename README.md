@@ -10,13 +10,13 @@ app_port: 8501
 # 🏗️ The Spanish Market Intelligence Refinery 2026
 
 ![Status](https://img.shields.io/badge/Status-In%20Production-success?style=for-the-badge&logo=statuspage)
-![Market](https://img.shields.io/badge/Market-Northern%20Spain-blue?style=for-the-badge&logo=googlemaps)
+![Market](https://img.shields.io/badge/Market%20Spain-blue?style=for-the-badge&logo=googlemaps)
 ![Stack](https://img.shields.io/badge/Stack-Modern%20Data%20Refinery-orange?style=for-the-badge&logo=databricks)
 
 > **"Turning the digital sludge of the Spanish job market into high-purity strategic gold."**
 
 ## 🌟 Project Vision
-In an era of information overload, this project acts as a **Digital Refinery**. It automatically monitors the pulse of the Spanish news cycle and the tech job market (specifically for the industrial and tech hubs of **Bilbao** and **Gijón**). 
+The goal is to ingest data from google RSS feeds in Spain to  sort it into tech, economy (finance) and real estate news. The data is then enriched with sentiment analysis and visualized in a dashboard to provide real-time insights into the "mood" of the Spanish economy.
 
 The architecture is built on the principle of **"Purity of Character" (1 Tim 4:12)**: ensuring that every data point served to the dashboard is honest, tested, and deduplicated.
 
@@ -25,7 +25,7 @@ The architecture is built on the principle of **"Purity of Character" (1 Tim 4:1
 ## 🍽️ The "Refinery" Architecture (How it Works)
 Our system follows a **Decoupled Sibling Structure**, separating Ingestion from Transformation.
 
-1.  **The Ingestion (Mage AI):** Our **Head Chef**. Every 6 hours, it bypasses "Walled Gardens" using an RSS loophole to pull thousands of job postings from LinkedIn and InfoJobs.
+1.  **The Ingestion (Mage AI):** Our **Head Chef**. Every 6 hours, it bypasses "Walled Gardens" using an RSS loophole to pull news postings.
 2.  **The AI Enrichment (Robertuito NLP):** Our **Specialist Saucier**. A specialized AI model trained on native Spanish text that analyzes the "Mood" of every headline with 99% accuracy.
 3.  **The Warehouse (PostgreSQL/DuckDB):** Our **Vault**. A dual-storage strategy optimized for industrial concurrency and local speed.
 4.  **The Transformation (dbt):** Our **Bouncer**. It cleans the data using high-level logic (Window Functions, `QUALIFY`) and runs 13+ automated tests to ensure no "Ghost Data" reaches the plate.

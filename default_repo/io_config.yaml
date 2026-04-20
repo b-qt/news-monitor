@@ -38,7 +38,7 @@ default:
   # DuckDB
   #DUCKDB_DATABASE: database
   DUCKDB_SCHEMA: main
-  DUCKDB_DATABASE: /home/src/data/news_db.duckdb
+  DUCKDB_DATABASE: news_db #/home/src/data/news_db.duckdb
   # Google
   GOOGLE_SERVICE_ACC_KEY:
     type: service_account

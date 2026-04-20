@@ -1,5 +1,5 @@
 services:
-  mageai:
+  mageai: # Mage for data ingestion and orchestration
     build: . # Use my Dockerfile in the current directory
     container_name: mageai_container
     image: mageai/mageai:latest
@@ -10,7 +10,7 @@ services:
     environment:
       - USER_CODE_PATH:/home/src/news_monitor
 
-  streamlit:
+  streamlit: # Streamlit for the analytics dashboard
     container_name: streamlit_app_container
     build: .
     image: samdobson/streamlit
@@ -22,3 +22,17 @@ services:
       - .:/home/src
     working_dir: /home/src
     command: streamlit run frontend/app.py --server.port=8501 --server.address=0.0.0.0
+
+
+# docker compose is of the form:
+# services:
+#   service_name:
+#     build: . # Use my Dockerfile in the current directory
+#     container_name: my_container
+#     image: my_image:latest
+#     ports:
+#       - "host_port:container_port"
+#     volumes:
+#       - .:/home/src
+#     environment:
+#       - ENV_VAR_NAME=value

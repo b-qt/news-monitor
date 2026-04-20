@@ -2,3 +2,7 @@ feedparser
 torch
 transformers
 pandas
+
+pysentimiento
+
+scikit-learn
