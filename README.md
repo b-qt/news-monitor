@@ -54,7 +54,7 @@ docker-compose up -d
 ---
 
 ## 🏛️ Architect's Note
-This project was built during the spring of 2026 as a strategic bridge to the industrial powerhouses of **Northern Spain**. It represents a commitment to **Infrastructure Sovereignty** and **Sustainable Data Engineering**—minimizing compute waste while maximizing insight purity.
+This project was built during the spring of 2026 and represents a commitment to **Infrastructure Sovereignty** and **Sustainable Data Engineering**—minimizing compute waste while maximizing insight purity.
 
 **Built with :tea: in Barcelona | April 2026.**
 
