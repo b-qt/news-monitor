@@ -51,6 +51,8 @@ docker-compose up -d
 *   **Mage Factory:** `localhost:6789`
 *   **Job Dashboard:** `localhost:8501`
 
+![Preview Image](preview.png)
+
 ---
 
 ## 🏛️ Architect's Note

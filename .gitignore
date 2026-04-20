@@ -45,4 +45,4 @@ reports/
 # data
 data/*.duckdb
 *.db
-*.png
+#*.png
